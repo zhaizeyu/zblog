@@ -11,16 +11,19 @@
   <div id="app">正在加载，请稍候...</div>
   <script>
     window.$docsify = {
-      name: '我的博客',
-      repo: '',
+      name: 'zblog',
+      repo: 'zhaizeyu/zblog',
       loadSidebar: true,
-      subMaxLevel: 3,
+      // 关键设置：告诉 Docsify 你在 zblog 子目录下
+      basePath: '/zblog/', 
+      // 别名设置：确保任何路径下都能找到侧边栏
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
       search: {
-        maxAge: 86400000,
         paths: 'auto',
-        placeholder: '搜索文章...',
-        noData: '找不到结果',
-        depth: 4
+        placeholder: '搜索',
+        noData: '找不到结果'
       }
     }
   </script>
