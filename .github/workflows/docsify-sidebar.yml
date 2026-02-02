@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - '**.md'
+      - '.github/workflows/docsify-sidebar.yml'
 
 jobs:
   build:
