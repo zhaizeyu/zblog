@@ -1,6 +1,6 @@
 * [首页](README.md)
-* **posts**
-  * [first-note](posts/first-note.md)
-* **posts/test**
-  * [test](posts/test/test.md)
-  * [test2](posts/test/test2.md)
+* **blogs**
+  * [first-note](blogs/first-note.md)
+* **blogs/test**
+  * [test](blogs/test/test.md)
+  * [test2](blogs/test/test2.md)
