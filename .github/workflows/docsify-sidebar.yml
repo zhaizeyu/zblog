@@ -3,7 +3,7 @@ name: Auto Sidebar
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - '**.md'
 
