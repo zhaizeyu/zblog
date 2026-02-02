@@ -17,6 +17,8 @@ jobs:
 
       - name: Generate Sidebar
         run: |
+          # 确保创建 .nojekyll 文件
+          touch .nojekyll
           echo "* [首页](README.md)" > _sidebar.md
           find . -name "*.md" ! -name "README.md" ! -name "_sidebar.md" ! -path "./node_modules/*" | sort | while read -r line; do
             rel_path=$(echo "$line" | sed 's|^\./||')
