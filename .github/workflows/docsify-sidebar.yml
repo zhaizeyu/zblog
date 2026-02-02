@@ -1,0 +1,34 @@
+name: Auto Sidebar
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Generate Sidebar
+        run: |
+          echo "* [首页](README.md)" > _sidebar.md
+          find . -name "*.md" ! -name "README.md" ! -name "_sidebar.md" ! -path "./node_modules/*" | sort | while read -r line; do
+            rel_path=$(echo "$line" | sed 's|^\./||')
+            title=$(basename "$rel_path" .md)
+            depth=$(echo "$rel_path" | tr -cd '/' | wc -c)
+            indent=$(printf '%*s' $((depth * 2)) '')
+            echo "${indent}* [$title]($rel_path)" >> _sidebar.md
+          done
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add _sidebar.md
+          git commit -m "docs: auto update sidebar [skip ci]" || exit 0
+          git push
