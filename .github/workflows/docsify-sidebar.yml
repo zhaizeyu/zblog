@@ -3,9 +3,10 @@ name: Auto Sidebar
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - '**.md'
+      - '.github/workflows/docsify-sidebar.yml'
 
 jobs:
   build:
