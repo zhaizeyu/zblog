@@ -7,6 +7,12 @@ on:
     paths:
       - '**.md'
       - '.github/workflows/docsify-sidebar.yml'
+  # 允许手动触发 (方便调试)
+  workflow_dispatch:
+
+# 显式声明写入权限
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -15,23 +21,54 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Generate Sidebar
+      - name: Generate Sidebar & NoJekyll
         run: |
-          # 确保创建 .nojekyll 文件
+          # 1. 确保 .nojekyll 存在 (解决 _sidebar.md 404 问题)
           touch .nojekyll
+
+          # 2. 初始化 _sidebar.md
           echo "* [首页](README.md)" > _sidebar.md
-          find . -name "*.md" ! -name "README.md" ! -name "_sidebar.md" ! -path "./node_modules/*" | sort | while read -r line; do
+          
+          # 3. 定义变量用于记录上一次的文件夹名
+          prev_dir=""
+
+          # 4. 查找 md 文件 -> 排序 -> 循环处理
+          # 排除 node_modules, .github, README.md, _sidebar.md
+          find . -name "*.md" ! -name "README.md" ! -name "_sidebar.md" ! -path "./node_modules/*" ! -path "./.github/*" | sort | while read -r line; do
+            
+            # 去掉开头的 ./
             rel_path=$(echo "$line" | sed 's|^\./||')
-            title=$(basename "$rel_path" .md)
-            depth=$(echo "$rel_path" | tr -cd '/' | wc -c)
-            indent=$(printf '%*s' $((depth * 2)) '')
-            echo "${indent}* [$title]($rel_path)" >> _sidebar.md
+            # 获取文件夹名
+            dir_name=$(dirname "$rel_path")
+            # 获取文件名(不含后缀)
+            file_name=$(basename "$rel_path" .md)
+
+            # --- 核心分组逻辑 ---
+            if [ "$dir_name" != "." ]; then
+              # 如果进入了一个新的文件夹，且不是根目录
+              if [ "$dir_name" != "$prev_dir" ]; then
+                # 输出文件夹名称作为分类标题 (加粗)
+                echo "* **$dir_name**" >> _sidebar.md
+                # 更新当前文件夹记录
+                prev_dir=$dir_name
+              fi
+              # 输出文件链接 (缩进 2 格)
+              echo "  * [$file_name]($rel_path)" >> _sidebar.md
+            else
+              # 如果是根目录下的文件，直接输出，不缩进
+              echo "* [$file_name]($rel_path)" >> _sidebar.md
+            fi
           done
 
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add _sidebar.md
-          git commit -m "docs: auto update sidebar [skip ci]" || exit 0
+          
+          # 同时添加 sidebar 和 nojekyll
+          git add _sidebar.md .nojekyll
+          
+          # 只有文件发生变化时才提交，否则跳过 (避免报错)
+          git commit -m "docs: auto update sidebar and nojekyll [skip ci]" || exit 0
+          
           git push
