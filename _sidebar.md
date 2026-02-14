@@ -1,8 +1,8 @@
 * [首页](README.md)
 * **blogs**
+  * [OpenClaw 部署指南](blogs/openclaw-deploy-guide.md)
+  * [冬日里的小马](blogs/winter-horse.md)
   * [first-note](blogs/first-note.md)
 * **blogs/test**
   * [test](blogs/test/test.md)
   * [test2](blogs/test/test2.md)
-* **blogs**
-  * [winter-horse](blogs/winter-horse.md)
