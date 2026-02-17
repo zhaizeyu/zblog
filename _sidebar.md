@@ -1,9 +1,4 @@
 * [首页](README.md)
 * **blogs**
+  * [OpenClaw 部署指南](blogs/openclaw-deploy-guide.md)
   * [first-note](blogs/first-note.md)
-  * [openclaw-deploy-guide](blogs/openclaw-deploy-guide.md)
-* **blogs/test**
-  * [test](blogs/test/test.md)
-  * [test2](blogs/test/test2.md)
-* **blogs**
-  * [winter-horse](blogs/winter-horse.md)
