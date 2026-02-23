@@ -1,5 +1,6 @@
 * [首页](README.md)
 * **blogs**
-  * [docsify-blog-setup-guide](blogs/docsify-blog-setup-guide.md)
+  * [docsify-blog-deploy-guide](blogs/docsify-blog-deploy-guide.md)
   * [ibkr-quant-deploy-guide](blogs/ibkr-quant-deploy-guide.md)
   * [openclaw-deploy-guide](blogs/openclaw-deploy-guide.md)
+  * [xray-vpn-deploy-guide](blogs/xray-vpn-deploy-guide.md)
