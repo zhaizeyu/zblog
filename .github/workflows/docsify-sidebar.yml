@@ -21,7 +21,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Generate Sidebar & NoJekyll
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Generate Sidebar, NoJekyll & Update Metadata
         run: |
           # 1. 确保 .nojekyll 存在 (解决 _sidebar.md 404 问题)
           touch .nojekyll
@@ -60,15 +65,18 @@ jobs:
             fi
           done
 
+          # 5. 执行元数据更新脚本
+          python update_metadata.py
+
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 同时添加 sidebar 和 nojekyll
-          git add _sidebar.md .nojekyll
+          # 同时添加所有可能更改的文件
+          git add .
           
           # 只有文件发生变化时才提交，否则跳过 (避免报错)
-          git commit -m "docs: auto update sidebar and nojekyll [skip ci]" || exit 0
+          git commit -m "docs: auto update sidebar, nojekyll and metadata [skip ci]" || exit 0
           
           git push
