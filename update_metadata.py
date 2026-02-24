@@ -2,7 +2,8 @@ import os
 import re
 from datetime import datetime
 
-BLOGS_DIR = os.path.expanduser("~/zblog/blogs")
+# 修正路径：使用相对路径，适应 CI 环境
+BLOGS_DIR = "./blogs"
 
 def update_blog_metadata(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
