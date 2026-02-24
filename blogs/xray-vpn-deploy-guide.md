@@ -162,3 +162,4 @@ systemctl status xray
 3. **日志查看**：若连接不畅，可查看实时日志：`journalctl -u xray -f`。
 
 ---
+*日期: 2026-02-24 | 字数: 297*
