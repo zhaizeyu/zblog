@@ -1,6 +1,18 @@
 * [首页](README.md)
 * **blogs**
   * [docsify-blog-deploy-guide](blogs/docsify-blog-deploy-guide.md)
+* **blogs/finance**
+  * [01_generative_ai](blogs/finance/01_generative_ai.md)
+  * [02_energy_internet](blogs/finance/02_energy_internet.md)
+  * [03_biotech_adc](blogs/finance/03_biotech_adc.md)
+  * [04_cybersecurity](blogs/finance/04_cybersecurity.md)
+  * [05_humanoid_robots](blogs/finance/05_humanoid_robots.md)
+  * [06_space_economy](blogs/finance/06_space_economy.md)
+  * [07_semiconductor_packaging](blogs/finance/07_semiconductor_packaging.md)
+  * [08_digital_health](blogs/finance/08_digital_health.md)
+  * [09_solid_state_battery](blogs/finance/09_solid_state_battery.md)
+  * [10_circular_economy](blogs/finance/10_circular_economy.md)
+* **blogs**
   * [ibkr-quant-deploy-guide](blogs/ibkr-quant-deploy-guide.md)
   * [openclaw-deploy-guide](blogs/openclaw-deploy-guide.md)
   * [test-auto-metadata](blogs/test-auto-metadata.md)
