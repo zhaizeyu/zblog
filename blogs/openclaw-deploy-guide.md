@@ -33,6 +33,12 @@ export XDG_RUNTIME_DIR=/run/user/$(id -u)
 * **推荐技能**: `github`, `gemini` (或 `anthropic`), `nano-banana-pro`。
 openclaw onboard可以进行重新配置
 
+hetzner芬兰服务器不能访问qwen大模型时，使用Cloudflare的vpn能解决问题
+# 安装 Cloudflare WARP 
+wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh
+# 选 1 安装，之后流量会走 Cloudflare 网络，通常能解决跨海 API 超时
+
+
 ### 3. 内存优化 (针对 1G/2G 内存可以考虑)
 开启 2GB Swap 防止崩溃：
 ```bash
