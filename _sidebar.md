@@ -17,3 +17,4 @@
   * [openclaw-deploy-guide](blogs/openclaw-deploy-guide.md)
   * [test-auto-metadata](blogs/test-auto-metadata.md)
   * [xray-vpn-deploy-guide](blogs/xray-vpn-deploy-guide.md)
+* [mcp_architecture_blog](mcp_architecture_blog.md)
