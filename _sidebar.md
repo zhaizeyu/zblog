@@ -15,6 +15,9 @@
 * **blogs**
   * [ibkr-quant-deploy-guide](blogs/ibkr-quant-deploy-guide.md)
   * [openclaw-deploy-guide](blogs/openclaw-deploy-guide.md)
+* **blogs/tech**
+  * [mcp-architecture](blogs/tech/mcp-architecture.md)
+* **blogs**
   * [test-auto-metadata](blogs/test-auto-metadata.md)
   * [xray-vpn-deploy-guide](blogs/xray-vpn-deploy-guide.md)
 * [mcp_architecture_blog](mcp_architecture_blog.md)
