@@ -12,5 +12,3 @@
   * [ibkr-quant-deploy-guide](blogs/finance/ibkr-quant-deploy-guide.md)
 * **blogs/tech**
   * [mcp-architecture](blogs/tech/mcp-architecture.md)
-* **blogs/test**
-  * [test-auto-metadata](blogs/test/test-auto-metadata.md)
