@@ -3,12 +3,14 @@
   * [gpt-sovits-m4-deployment](blogs/ai/gpt-sovits-m4-deployment.md)
 * **blogs/automation**
   * [ai-news-factory-guide](blogs/automation/ai-news-factory-guide.md)
-* **blogs**
-  * [docsify-blog-deploy-guide](blogs/docsify-blog-deploy-guide.md)
-  * [ibkr-quant-deploy-guide](blogs/ibkr-quant-deploy-guide.md)
-  * [openclaw-deploy-guide](blogs/openclaw-deploy-guide.md)
+* **blogs/cloud**
+  * [openclaw-deploy-guide](blogs/cloud/openclaw-deploy-guide.md)
+  * [xray-vpn-deploy-guide](blogs/cloud/xray-vpn-deploy-guide.md)
+* **blogs/dev**
+  * [docsify-blog-deploy-guide](blogs/dev/docsify-blog-deploy-guide.md)
+* **blogs/finance**
+  * [ibkr-quant-deploy-guide](blogs/finance/ibkr-quant-deploy-guide.md)
 * **blogs/tech**
   * [mcp-architecture](blogs/tech/mcp-architecture.md)
-* **blogs**
-  * [test-auto-metadata](blogs/test-auto-metadata.md)
-  * [xray-vpn-deploy-guide](blogs/xray-vpn-deploy-guide.md)
+* **blogs/test**
+  * [test-auto-metadata](blogs/test/test-auto-metadata.md)
