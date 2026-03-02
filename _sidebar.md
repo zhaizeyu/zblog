@@ -1,4 +1,6 @@
 * [首页](README.md)
+* **blogs/ai**
+  * [gpt-sovits-m4-deployment](blogs/ai/gpt-sovits-m4-deployment.md)
 * **blogs**
   * [docsify-blog-deploy-guide](blogs/docsify-blog-deploy-guide.md)
   * [ibkr-quant-deploy-guide](blogs/ibkr-quant-deploy-guide.md)
