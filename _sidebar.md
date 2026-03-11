@@ -3,12 +3,9 @@
   * [github-trending-2026-03-10](blogs/ai/github-trending-2026-03-10.md)
   * [github-trending-2026-03-11](blogs/ai/github-trending-2026-03-11.md)
   * [gpt-sovits-m4-deployment](blogs/ai/gpt-sovits-m4-deployment.md)
-* **blogs/automation**
-  * [ai-news-factory-guide](blogs/automation/ai-news-factory-guide.md)
-* **blogs/cloud**
-  * [openclaw-deploy-guide](blogs/cloud/openclaw-deploy-guide.md)
-  * [xray-vpn-deploy-guide](blogs/cloud/xray-vpn-deploy-guide.md)
-* **blogs/dev**
-  * [docsify-blog-deploy-guide](blogs/dev/docsify-blog-deploy-guide.md)
-* **blogs/finance**
-  * [ibkr-quant-deploy-guide](blogs/finance/ibkr-quant-deploy-guide.md)
+* **blogs/deployment-guides**
+  * [ai-news-factory-guide](blogs/deployment-guides/ai-news-factory-guide.md)
+  * [docsify-blog-deploy-guide](blogs/deployment-guides/docsify-blog-deploy-guide.md)
+  * [ibkr-quant-deploy-guide](blogs/deployment-guides/ibkr-quant-deploy-guide.md)
+  * [openclaw-deploy-guide](blogs/deployment-guides/openclaw-deploy-guide.md)
+  * [xray-vpn-deploy-guide](blogs/deployment-guides/xray-vpn-deploy-guide.md)
