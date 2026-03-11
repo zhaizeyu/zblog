@@ -12,5 +12,3 @@
   * [docsify-blog-deploy-guide](blogs/dev/docsify-blog-deploy-guide.md)
 * **blogs/finance**
   * [ibkr-quant-deploy-guide](blogs/finance/ibkr-quant-deploy-guide.md)
-* **blogs/tech**
-  * [mcp-architecture](blogs/tech/mcp-architecture.md)
