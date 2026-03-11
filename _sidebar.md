@@ -1,6 +1,7 @@
 * [首页](README.md)
 * **blogs/ai**
   * [github-trending-2026-03-10](blogs/ai/github-trending-2026-03-10.md)
+  * [github-trending-2026-03-11](blogs/ai/github-trending-2026-03-11.md)
   * [gpt-sovits-m4-deployment](blogs/ai/gpt-sovits-m4-deployment.md)
 * **blogs/automation**
   * [ai-news-factory-guide](blogs/automation/ai-news-factory-guide.md)
