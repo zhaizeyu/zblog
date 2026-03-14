@@ -4,6 +4,7 @@
   * [github-trending-2026-03-11](blogs/ai/github-trending-2026-03-11.md)
   * [github-trending-2026-03-12](blogs/ai/github-trending-2026-03-12.md)
   * [github-trending-2026-03-13](blogs/ai/github-trending-2026-03-13.md)
+  * [github-trending-2026-03-14](blogs/ai/github-trending-2026-03-14.md)
 * **blogs/deployment-guides**
   * [ai-news-factory-guide](blogs/deployment-guides/ai-news-factory-guide.md)
   * [docsify-blog-deploy-guide](blogs/deployment-guides/docsify-blog-deploy-guide.md)
