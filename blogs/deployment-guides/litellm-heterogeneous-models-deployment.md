@@ -1,49 +1,71 @@
 # 构建坚如磐石的异构大模型 API 网关：LiteLLM + WARP 代理实战部署指南
 
-在当今的大模型生态中，我们常常需要同时调用多个不同厂商的模型服务，例如通义千问（Qwen）和 DeepSeek。然而，这些服务可能面临复杂的网络环境限制：通义千问在国内访问顺畅，但在某些海外服务器上可能被地域限制；而 DeepSeek 则可能正好相反。
+在海外（如欧洲、美洲）服务器上部署大模型 API 聚合网关时，我们经常会遇到一个极其棘手的“网络跷跷板”问题：
 
-本文将手把手教你如何利用 **LiteLLM** 作为统一的 API 网关，并巧妙结合 **Cloudflare WARP** 代理，构建一个能同时稳定访问国内外异构大模型的坚如磐石的 API 网关。
+1.  **通义千问 (Qwen) 的地域风控**：阿里云的大模型 API 往往会对海外云服务商（如 Hetzner, AWS, DigitalOcean）的 IP 进行严格拦截。直连请求会直接超时或报错卡死。
+2.  **DeepSeek 的代理封杀**：为了防刷量，DeepSeek 官方严厉封杀了包括 Cloudflare WARP 在内的大量机房与代理 IP。
+3.  **全局代理泄漏**：如果在服务器或 Docker 层面挂载 WARP 代理，千问通了，但 DeepSeek 会被拦截；关掉 WARP，DeepSeek 通了，千问又挂了。
 
-## 核心挑战与解决方案
+**核心目标**：使用 **LiteLLM + PostgreSQL** 搭建一个带可视化后台的企业级 API 网关，并通过 **宿主机 WARP 局部代理 + 容器防泄漏机制**，实现针对不同模型的**精准路由分流（Split Tunneling）**。
 
-*   **挑战 1**: 外部无法直接访问部署在 Docker 容器内的 LiteLLM 服务。
-    *   **方案**: 使用 `network_mode: "host"`，让容器共享宿主机的网络命名空间。
-*   **挑战 2**: LiteLLM 内部组件对代理支持不完善，导致部分模型无法通过代理访问。
-    *   **方案**: 在模型名称前添加 `openai/` 前缀，强制使用兼容性更好的 OpenAI 客户端。
-*   **挑战 3**: 需要为直连模型（如 DeepSeek）和代理模型（如 Qwen）建立隔离的网络策略。
-    *   **方案**: 利用 `NO_PROXY` 环境变量，精确控制哪些流量走代理，哪些不走。
+---
 
-## 🛠️ 第一步：环境准备
+## 🛠️ 核心架构方案
 
-确保你的服务器已安装 **Docker** 和 **Docker Compose**。
+*   **网关层**：LiteLLM (处理模型聚合、路由转发、鉴权与计费统计)。
+*   **数据层**：PostgreSQL (持久化配置，支持一键创建无限个子 Key 和额度限制)。
+*   **网络层**：Docker 采用 `network_mode: "host"` 彻底绕过虚拟网桥带来的跨主机访问障碍与路由拦截。
+*   **代理层**：宿主机运行 Cloudflare WARP (`mode proxy`)，仅暴露本地 40000 端口作为出口通道，绝不修改系统默认路由。
 
-## 📝 第二步：创建配置文件
+---
 
-### 1. 创建 `.env` 文件
+## 🚀 完整部署流程
+
+### 第一步：配置宿主机 WARP (局部代理模式)
+
+我们需要让 WARP 作为一个安静的本地服务运行，绝不能接管全局网络。在宿主机执行：
 
 ```bash
-mkdir -p ~/litellm-gateway && cd ~/litellm-gateway
+# 1. 注册设备 (首次运行需执行)
+warp-cli registration new
+
+# 2. 设置为纯代理模式
+warp-cli mode proxy
+
+# 3. 连接 WARP
+warp-cli connect
 ```
 
-创建 `~/litellm-gateway/.env` 文件，填入你的 API Keys：
+### 第二步：配置环境变量 (`.env`)
 
-```ini
-# 你的 LiteLLM 主密钥 (用于验证外部请求)
-LITELLM_MASTER_KEY=your_strong_master_key_here
-
-# 模型提供商的 API Keys
-OPENAI_API_KEY=sk-... # 用于 DeepSeek 等
-DASHSCOPE_API_KEY=sk-... # 用于通义千问
-
-# 数据库配置
+```bash
+cat <<EOF > .env
+LITELLM_MASTER_KEY=sk-your-master-key
+DASHSCOPE_API_KEY=sk-your-qwen-key
+DEEPSEEK_API_KEY=sk-your-deepseek-key
 POSTGRES_USER=llm_user
 POSTGRES_PASSWORD=llm_pass
 POSTGRES_DB=litellm_db
+EOF
 ```
 
-### 2. 创建 `docker-compose.yml` 文件
+### 第三步：配置 LiteLLM 路由分流 (`config.yaml`)
 
-创建 `~/litellm-gateway/docker-compose.yml` 文件：
+```yaml
+model_list:
+  - model_name: qwen3-max
+    litellm_params:
+      model: openai/qwen3-max-2026-01-23
+      api_base: "https://coding.dashscope.aliyuncs.com/v1"
+      api_key: "os.environ/DASHSCOPE_API_KEY"
+      proxy_url: "http://127.0.0.1:40000"
+  - model_name: deepseek-chat
+    litellm_params:
+      model: deepseek/deepseek-chat
+      api_key: "os.environ/DEEPSEEK_API_KEY"
+```
+
+### 第四步：Docker Compose 部署
 
 ```yaml
 services:
@@ -51,22 +73,14 @@ services:
     image: ghcr.io/berriai/litellm:latest
     container_name: litellm
     restart: always
-    network_mode: "host" # 关键！解决外部访问问题
+    network_mode: "host"
+    env_file: .env
     environment:
-      - LITELLM_MASTER_KEY_FILE=/run/secrets/master_key
       - DATABASE_URL=postgresql://llm_user:llm_pass@localhost:5432/litellm_db
-      - DASHSCOPE_API_KEY_FILE=/run/secrets/dashscope_api_key
-      - OPENAI_API_KEY_FILE=/run/secrets/openai_api_key
-      # 关键！为通义千问等国内模型设置代理
-      - HTTP_PROXY=http://127.0.0.1:40000
-      - HTTPS_PROXY=http://127.0.0.1:40000
-      # 关键！为 DeepSeek 等海外模型设置直连
       - NO_PROXY=localhost,127.0.0.1,api.deepseek.com
-    secrets:
-      - master_key
-      - dashscope_api_key
-      - openai_api_key
-    command: ["--port", "4000"]
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
 
   db:
     image: postgres:16-alpine
@@ -88,58 +102,22 @@ services:
 
 volumes:
   pgdata:
-
-secrets:
-  master_key:
-    file: ./master_key.txt
-  dashscope_api_key:
-    file: ./dashscope_api_key.txt
-  openai_api_key:
-    file: ./openai_api_key.txt
 ```
 
-### 3. 创建密钥文件
+### 第五步：一键启动与跨主机验证
 
-为了安全，我们将 API Key 存放在独立的文件中：
-
+启动服务：
 ```bash
-# 创建主密钥文件
-echo "your_strong_master_key_here" > ~/litellm-gateway/master_key.txt
-
-# 创建 DashScope (通义千问) API Key 文件
-echo "sk-..." > ~/litellm-gateway/dashscope_api_key.txt
-
-# 创建 OpenAI API Key 文件 (用于 DeepSeek)
-echo "sk-..." > ~/litellm-gateway/openai_api_key.txt
-```
-
-## 🔌 第三步：启动 Cloudflare WARP 代理
-
-在服务器上启动 WARP 代理，并监听 `127.0.0.1:40000`。具体命令取决于你使用的 WARP 客户端。例如，如果你使用 `wgcf` 或其他 WireGuard 客户端，请确保其配置了正确的监听地址。
-
-## 🚀 第四步：一键启动与跨主机验证
-
-### 启动服务
-
-```bash
-cd ~/litellm-gateway
 docker compose up -d
-```
-
-### 查看日志
-
-```bash
 docker compose logs -f litellm
 ```
 
-### 跨主机测试
-
-找一台**另外的电脑或服务器**进行测试，验证双链路是否工作正常：
+找一台**另外的电脑或服务器**进行跨主机测试：
 
 ✅ **测试 1：DeepSeek（直连链路验证）**
 ```bash
 curl -X POST http://<服务器公网IP>:4000/v1/chat/completions \
-  -H "Authorization: Bearer <你的LiteLLM_Master_Key>" \
+  -H "Authorization: Bearer <你的LiteLLM_Key>" \
   -H "Content-Type: application/json" \
   -d '{"model": "deepseek-chat", "messages": [{"role": "user", "content": "你好"}]}'
 ```
@@ -147,12 +125,12 @@ curl -X POST http://<服务器公网IP>:4000/v1/chat/completions \
 ✅ **测试 2：通义千问（WARP 代理链路验证）**
 ```bash
 curl -X POST http://<服务器公网IP>:4000/v1/chat/completions \
-  -H "Authorization: Bearer <你的LiteLLM_Master_Key>" \
+  -H "Authorization: Bearer <你的LiteLLM_Key>" \
   -H "Content-Type: application/json" \
-  -d '{"model": "openai/qwen3-max", "messages": [{"role": "user", "content": "你好"}]}'
+  -d '{"model": "qwen3-max", "messages": [{"role": "user", "content": "你好"}]}'
 ```
 
-注意：调用通义千问时，模型名需加上 `openai/` 前缀。
+---
 
 ## 🎉 总结
 
@@ -161,4 +139,4 @@ curl -X POST http://<服务器公网IP>:4000/v1/chat/completions \
 这套架构不仅跑通了极度挑剔的异构模型网络环境，还借助 PostgreSQL 为团队或个人项目提供了一个具备计费追踪、无限额度 Key 拆分的坚如磐石的大模型 API 网关！
 
 ---
-*日期: 2026-03-16 | 字数: 3361*
+*日期: 2026-03-16 | 字数: 1850*
