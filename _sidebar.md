@@ -11,6 +11,7 @@
   * [ai-news-factory-guide](blogs/deployment-guides/ai-news-factory-guide.md)
   * [docsify-blog-deploy-guide](blogs/deployment-guides/docsify-blog-deploy-guide.md)
   * [gpt-sovits-m4-deployment](blogs/deployment-guides/gpt-sovits-m4-deployment.md)
+  * [hindsight-deployment-guide](blogs/deployment-guides/hindsight-deployment-guide.md)
   * [ibkr-quant-deploy-guide](blogs/deployment-guides/ibkr-quant-deploy-guide.md)
   * [litellm-perfect-deployment](blogs/deployment-guides/litellm-perfect-deployment.md)
   * [openclaw-deploy-guide](blogs/deployment-guides/openclaw-deploy-guide.md)
