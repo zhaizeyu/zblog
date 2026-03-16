@@ -12,5 +12,6 @@
   * [docsify-blog-deploy-guide](blogs/deployment-guides/docsify-blog-deploy-guide.md)
   * [gpt-sovits-m4-deployment](blogs/deployment-guides/gpt-sovits-m4-deployment.md)
   * [ibkr-quant-deploy-guide](blogs/deployment-guides/ibkr-quant-deploy-guide.md)
+  * [litellm-heterogeneous-models-deployment](blogs/deployment-guides/litellm-heterogeneous-models-deployment.md)
   * [openclaw-deploy-guide](blogs/deployment-guides/openclaw-deploy-guide.md)
   * [xray-vpn-deploy-guide](blogs/deployment-guides/xray-vpn-deploy-guide.md)
