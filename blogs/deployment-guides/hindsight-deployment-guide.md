@@ -128,4 +128,4 @@ docker compose logs -f hindsight
 直接修改 `docker-compose.yml` 中的挂载目录名称（例如把 `./pg_data` 改成 `./pg_data_v2`），让系统在一张“白纸”上重新创建一个匹配新维度的干净数据库，然后 `docker compose down && docker compose up -d` 即可完美解决。
 
 ---
-*日期: 2026-03-17 | 字数: 3309*
+*日期: 2026-03-18 | 字数: 3309*
