@@ -1,6 +1,10 @@
 import { defineConfig } from 'vitepress'
 import { buildBlogCategoryGroups, buildBlogYearGroups, buildDocsSidebar } from '../scripts/content.mjs'
 
+const repositoryName = process.env.GITHUB_REPOSITORY?.split('/')[1]
+const base = process.env.SITE_BASE
+  ?? (process.env.GITHUB_ACTIONS === 'true' && repositoryName ? `/${repositoryName}/` : '/')
+
 const blogCategories = buildBlogCategoryGroups()
 const blogArchives = buildBlogYearGroups()
 const docsSidebar = buildDocsSidebar()
@@ -9,6 +13,7 @@ export default defineConfig({
   lang: 'zh-CN',
   title: '我的知识库',
   description: '基于 VitePress 的文档与博客站点',
+  base,
   srcExclude: ['**/README.md', '**/TODO.md'],
   cleanUrls: true,
   lastUpdated: true,
