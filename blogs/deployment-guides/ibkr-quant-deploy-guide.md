@@ -96,4 +96,4 @@ python src/main.py
 4. **重启**: `docker compose down && docker compose up -d`。
 
 ---
-*日期: 2026-03-18 | 字数: 1740*
+*日期: 2026-03-19 | 字数: 1740*
