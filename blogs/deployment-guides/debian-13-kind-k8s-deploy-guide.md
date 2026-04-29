@@ -425,7 +425,7 @@ http://你的VPS公网IP:8080
 `kubectl cluster-info`
 
 查看 kind node 容器：
-`docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}'`
+<span v-pre>`docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}'`</span>
 
 进入 kind node 容器：
 `docker exec -it diag-lab-control-plane bash`
@@ -550,7 +550,7 @@ kubectl describe pod pending-demo
 kind 的 Node 是 Docker 容器，因此可以通过停止容器模拟 Node 异常。
 
 查看 kind node 容器：
-`docker ps --format 'table {{.Names}}\t{{.Status}}'`
+<span v-pre>`docker ps --format 'table {{.Names}}\t{{.Status}}'`</span>
 
 停止一个 worker：
 `docker stop diag-lab-worker`
