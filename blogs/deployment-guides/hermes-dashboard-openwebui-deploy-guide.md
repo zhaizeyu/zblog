@@ -165,50 +165,44 @@ EOF
 
 ```yaml
 services:
- hermes:
- image: nousresearch/hermes-agent:latest
- container_name: hermes
- restart: unless-stopped
- command: gateway run
- ports:
- # Hermes OpenAI-compatible API
- - "8642:8642"
- # Hermes Dashboard
- - "9119:9119"
- volumes:
- - ${HERMES_DATA_DIR}:/opt/data
- environment:
- # Dashboard 必须作为容器环境变量传入，因为它由 Docker entrypoint 启动
- - HERMES_DASHBOARD=1
- - HERMES_DASHBOARD_HOST=0.0.0.0
- - HERMES_DASHBOARD_PORT=9119
- networks:
- - hermes-net
- shm_size: "1g"
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    command: gateway run
+    ports:
+      - "8642:8642"
+      - "9119:9119"
+    volumes:
+      - ${HERMES_DATA_DIR}:/opt/data
+    environment:
+      - HERMES_DASHBOARD=1
+      - HERMES_DASHBOARD_HOST=0.0.0.0
+      - HERMES_DASHBOARD_PORT=9119
+    networks:
+      - hermes-net
+    shm_size: "1g"
 
- open-webui:
- image: ghcr.io/open-webui/open-webui:latest
- container_name: open-webui
- restart: unless-stopped
- ports:
- # 宿主机 3001 -> Open WebUI 容器内 8080
- - "3001:8080"
- volumes:
- - ${OPEN_WEBUI_DATA_DIR}:/app/backend/data
- environment:
- # Open WebUI 自动连接 Hermes API，必须带 /v1
- - OPENAI_API_BASE_URL=http://hermes:8642/v1
- - OPENAI_API_KEY=${HERMES_API_KEY}
- # 禁用默认 Ollama，避免模型列表里出现空 Ollama 后端
- - ENABLE_OLLAMA_API=false
- networks:
- - hermes-net
- depends_on:
- - hermes
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - "3001:8080"
+    volumes:
+      - ${OPEN_WEBUI_DATA_DIR}:/app/backend/data
+    environment:
+      - OPENAI_API_BASE_URL=http://hermes:8642/v1
+      - OPENAI_API_KEY=${HERMES_API_KEY}
+      - ENABLE_OLLAMA_API=false
+    networks:
+      - hermes-net
+    depends_on:
+      - hermes
 
 networks:
- hermes-net:
- driver: bridge
+  hermes-net:
+    driver: bridge
 ```
 
 > 注意：这里没有配置 `HERMES_DASHBOARD_TUI=1`。原因是 Dashboard 的内嵌 Chat/TUI 在部分版本或环境下可能不稳定，容易出现 [session ended]。建议把 Dashboard 当管理页使用，真正 TUI 用单独的临时容器启动。
