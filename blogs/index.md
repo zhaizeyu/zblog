@@ -4,7 +4,7 @@
 
 - `ai`：每日 GitHub 趋势与 AI 方向观察。
 - `deployment-guides`：各类项目部署、运维与实践手册。
-- `personal-dev-env`：个人开发者环境能力、VPS、网络、AI 工具链与自托管实践。
+- `personal-dev`：个人开发者环境能力、VPS、网络、AI 工具链与自托管实践。
 
 > 侧边栏会在 VitePress 启动与构建时自动扫描 `blogs/` 目录并生成，因此新增文章后无需手动改配置。
 
